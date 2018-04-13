@@ -1,7 +1,6 @@
 # Mockserver
 
-
 ## Development
 
-- Installation: `npm install`
-- Start the server: `npm start`
+* Installation: `npm install`
+* Start the server: `npm start`
