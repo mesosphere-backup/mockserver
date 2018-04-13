@@ -1,24 +1,30 @@
 {
   "name": "mockserver",
   "version": "1.0.0",
-  "description": "A mockserver that allows you to mock XHR, long-polling XHR, server sent events and websocket connections",
+  "description":
+    "A mockserver that allows you to mock XHR, long-polling XHR, server sent events and websocket connections",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node dist/index.js",
+    "prestart": "npm run build",
+    "build": "npm run build-ts",
+    "prewatch": "npm run build",
+    "watch":
+      "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\"  \"npm run watch-ts\" \"npm run watch-node\"",
+    "watch-node": "nodemon dist/index.js",
+    "build-ts": "tsc",
+    "watch-ts": "tsc -w",
     "setup:git-hooks": "./scripts/pre-install",
     "commitlint": "commitlint -e",
     "test": "jest",
-    "format": "prettier --write .{/**,}/*.{md,js,ts} && prettier --write ./**/__tests__/*.{md,js,ts}"
+    "format":
+      "prettier --write .{/**,}/*.{md,js,ts} && prettier --write ./**/__tests__/*.{md,js,ts}"
   },
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/mesosphere/mockserver.git"
   },
-  "keywords": [
-    "mock",
-    "mockserver",
-    "testing"
-  ],
+  "keywords": ["mock", "mockserver", "testing"],
   "author": "DanielMSchmidt <dschmidt@mesosphere.com>",
   "license": "MIT",
   "bugs": {
@@ -27,9 +33,48 @@
   "jest": {
     "projects": [
       {
-        "displayName": "Jest"
+        "displayName": "Jest",
+        "transform": {
+          "^.+\\.ts$": "ts-jest"
+        },
+        "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(js|ts)$",
+        "moduleFileExtensions": ["ts", "js", "json"]
       },
-      { "displayName": "Prettier", "runner": "jest-runner-prettier", "moduleFileExtensions": ["js", "jsx", "json", "ts", "tsx", "css", "less", "scss", "graphql", "md", "markdown"], "testMatch": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "**/*.css", "**/*.less", "**/*.scss", "**/*.graphql", "**/*.md", "**/*.markdown"] }
+      {
+        "displayName": "Prettier",
+        "runner": "jest-runner-prettier",
+        "moduleFileExtensions": [
+          "js",
+          "jsx",
+          "json",
+          "ts",
+          "tsx",
+          "css",
+          "less",
+          "scss",
+          "graphql",
+          "md",
+          "markdown"
+        ],
+        "testMatch": [
+          "src/**/*.js",
+          "src/**/*.jsx",
+          "src/**/*.ts",
+          "src/**/*.tsx",
+          "src/**/*.css",
+          "src/**/*.less",
+          "src/**/*.scss",
+          "src/**/*.graphql",
+          "**/*.md",
+          "**/*.markdown"
+        ]
+      },
+      {
+        "displayName": "TsLint",
+        "runner": "jest-runner-tslint",
+        "moduleFileExtensions": ["ts"],
+        "testMatch": ["**/*.ts"]
+      }
     ]
   },
   "homepage": "https://github.com/mesosphere/mockserver#readme",
@@ -45,11 +90,18 @@
   "devDependencies": {
     "@commitlint/cli": "^6.1.3",
     "@commitlint/config-conventional": "^6.1.3",
+    "@types/jest": "^22.2.3",
     "babel-jest": "^22.4.3",
     "babel-preset-env": "^1.6.1",
+    "concurrently": "^3.5.1",
     "detect-port": "^1.2.2",
     "jest": "^22.4.3",
     "jest-runner-prettier": "^0.2.2",
-    "prettier": "^1.12.0"
+    "jest-runner-tslint": "^1.0.4",
+    "nodemon": "^1.17.3",
+    "prettier": "^1.12.0",
+    "ts-jest": "^22.4.3",
+    "tslint": "^5.9.1",
+    "typescript": "^2.8.1"
   }
 }

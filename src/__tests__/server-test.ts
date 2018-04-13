@@ -7,9 +7,9 @@ describe("Server", () => {
     });
 
     it("returns the configured port", () => {
-      process.env.PORT = 4002;
+      process.env.PORT = "4002";
       expect(getPort()).toBe(4002);
-      process.env.PORT = null;
+      process.env.PORT = undefined;
     });
   });
 });
