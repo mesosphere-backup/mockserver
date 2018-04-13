@@ -1,9 +1,18 @@
 {
   "name": "mockserver",
+<<<<<<< HEAD
   "version": "1.0.0",
   "description": "A mockserver that allows you to mock XHR, long-polling XHR, server sent events and websocket connections",
+=======
+  "version": "0.0.1-pre",
+  "description":
+    "A mockserver that allows you to mock XHR, long-polling XHR, server sent events and websocket connections",
+>>>>>>> dd3f1eb... foo
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
+    "setup:git-hooks": "./scripts/pre-install",
+    "commitlint": "commitlint -e",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -20,5 +29,10 @@
   "bugs": {
     "url": "https://github.com/mesosphere/mockserver/issues"
   },
-  "homepage": "https://github.com/mesosphere/mockserver#readme"
+  "homepage": "https://github.com/mesosphere/mockserver#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "npmlog": "^4.1.2"
+  },
+  "devDependencies": {}
 }
