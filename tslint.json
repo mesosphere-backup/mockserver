@@ -1,0 +1,6 @@
+{
+  "extends": ["@dcos/tslint-config"],
+  "linterOptions": {
+    "exclude": ["./dist/**/*", "./typings/*"]
+  }
+}
