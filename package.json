@@ -1,0 +1,24 @@
+{
+  "name": "mockserver",
+  "version": "1.0.0",
+  "description": "A mockserver that allows you to mock XHR, long-polling XHR, server sent events and websocket connections",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/mesosphere/mockserver.git"
+  },
+  "keywords": [
+    "mock",
+    "mockserver",
+    "testing"
+  ],
+  "author": "DanielMSchmidt <dschmidt@mesosphere.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mesosphere/mockserver/issues"
+  },
+  "homepage": "https://github.com/mesosphere/mockserver#readme"
+}
