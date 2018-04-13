@@ -3,4 +3,9 @@
 ## Development
 
 * Installation: `npm install`
-* Start the server: `npm start`
+* Start production server: `npm start`
+* Start development server: `npm run watch`
+
+## Testing
+
+Please run `npm test`
