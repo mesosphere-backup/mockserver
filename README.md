@@ -1,10 +1,9 @@
 # Mockserver
 
-
 ## Development
 
-- Installation: `npm install`
-- Start the server: `npm start`
+* Installation: `npm install`
+* Start the server: `npm start`
 
 **How to setup git hooks**
 
