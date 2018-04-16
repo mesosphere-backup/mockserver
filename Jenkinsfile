@@ -2,8 +2,13 @@
 
 @Library('sec_ci_libs@v2-latest') _
 
-def master_branches = ["master", ] as String[]
-def release_branches = ["master", ] as String[]
+// master_branches are for authentication library, feel free to add your feature/* branch here
+def master_branches = ["master"] as String[]
+
+// release branches are for autmatic version bumps
+// Do NOT add feature branches here!
+// Do NOT add anything you might want to merge into a release branch here!
+def release_branches = ["master"] as String[]
 
 pipeline {
   agent {
@@ -43,9 +48,12 @@ pipeline {
         }
       }
       steps {
-        sshagent (credentials: ['4ff09dce-407b-41d3-847a-9e6609dd91b8']) {
-          sh "npm run release"
-          sh "git push --follow-tags origin ${BRANCH_NAME}"
+        withCredentials([
+            usernamePassword(credentialsId: 'a7ac7f84-64ea-4483-8e66-bb204484e58f', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USER')
+        ]) {
+          sh "git fetch"
+          sh "git checkout $BRANCH_NAME"
+          sh "[ -z \"\$(git log -1 --pretty=%B | grep 'chore\\(release\\)')\" ] && npm run release && git push --follow-tags https://$GIT_USER:$GIT_PASSWORD@github.com/mesosphere/mockserver $BRANCH_NAME"
         }
       }
     }
