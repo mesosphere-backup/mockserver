@@ -35,5 +35,18 @@ pipeline {
         }
       }
     }
+    stage('Bump Version') {
+      when {
+        expression {
+          release_branches.contains(BRANCH_NAME)
+        }
+      }
+      steps {
+        sshagent (credentials: ['4ff09dce-407b-41d3-847a-9e6609dd91b8']) {
+          sh "npm run release"
+          sh "git push --follow-tags origin ${BRANCH_NAME}"
+        }
+      }
+    }
   }
 }
