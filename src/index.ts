@@ -1,3 +1,4 @@
 import server from "./server";
+import { getPort } from "./config";
 
-server();
+server(getPort());
