@@ -8,6 +8,7 @@ def release_branches = ["master", ] as String[]
 pipeline {
   agent {
     dockerfile {
+      filename 'Dockerfile.dev'
       args  '--shm-size=1g'
     }
   }

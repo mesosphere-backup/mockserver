@@ -1,0 +1,11 @@
+FROM node:9.11.1-alpine
+
+EXPOSE 3000
+
+RUN apk add --update --no-cache git
+
+COPY package.json package-lock.json ./
+RUN npm install
+
+COPY . .
+CMD [ "npm", "start" ]
