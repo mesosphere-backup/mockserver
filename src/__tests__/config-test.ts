@@ -2,6 +2,10 @@ import log from "npmlog";
 import { getPort, getProxyHostPort } from "../config";
 
 describe("Config", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   describe("#getPort", () => {
     it("returns a default port if no port is configured", () => {
       expect(getPort()).toBe(3000);
@@ -40,7 +44,6 @@ describe("Config", () => {
 
     it("shows a warning if no port is configured", () => {
       process.env.PROXY_HOST_PORT = "my-application.com";
-      log.warn.mockReset();
       const hostPort = getProxyHostPort();
       expect(hostPort).toBe("my-application.com:80");
       expect(log.warn).toHaveBeenCalled();

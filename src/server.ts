@@ -1,4 +1,5 @@
 import express from "express";
+import proxy from "express-http-proxy";
 import log from "npmlog";
 
 export default function server(
@@ -8,8 +9,10 @@ export default function server(
   return new Promise(resolve => {
     const app = express();
 
+    app.use(proxy(proxyHostPort));
+
     app.listen(port, () => {
-      log.info(`Started mockserver on port ${port}`);
+      log.info("server", `Started mockserver on port ${port}`);
       resolve();
     });
   });
