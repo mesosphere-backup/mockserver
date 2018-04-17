@@ -41,21 +41,5 @@ pipeline {
         }
       }
     }
-    stage('Bump Version') {
-      when {
-        expression {
-          release_branches.contains(BRANCH_NAME)
-        }
-      }
-      steps {
-        withCredentials([
-            usernamePassword(credentialsId: 'a7ac7f84-64ea-4483-8e66-bb204484e58f', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USER')
-        ]) {
-          sh "git fetch"
-          sh "git checkout $BRANCH_NAME"
-          sh "[ -z \"\$(git log -1 --pretty=%B | grep 'chore\\(release\\)')\" ] && npm run release && git push --follow-tags https://$GIT_USER:$GIT_PASSWORD@github.com/mesosphere/mockserver $BRANCH_NAME"
-        }
-      }
-    }
   }
 }
