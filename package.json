@@ -68,8 +68,9 @@
         "runner": "jest-runner-prettier",
         "moduleFileExtensions": ["js", "ts", "md", "json"],
         "testMatch": [
-          "src/**/*.js",
-          "src/**/*.ts",
+          "<rootDir>/src/**/*.js",
+          "<rootDir>/src/*.ts",
+          "<rootDir>/src/**/*.ts",
           "**/*.md",
           "<rootDir>/package.json"
         ]
