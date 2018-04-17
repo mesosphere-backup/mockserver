@@ -53,7 +53,8 @@ pipeline {
         ]) {
           sh "git fetch"
           sh "git checkout $BRANCH_NAME"
-          sh "[ -z \"\$(git log -1 --pretty=%B | grep 'chore\\(release\\)')\" ] && npm run release && git push --follow-tags https://$GIT_USER:$GIT_PASSWORD@github.com/mesosphere/mockserver $BRANCH_NAME"
+          sh "echo Last Commit: \$(git log -1 --oneline)"
+          sh "[ -n \"\$(git log -1 --oneline | grep 'Merge pull request')\" ] && npm run release && git push --follow-tags https://$GIT_USER:$GIT_PASSWORD@github.com/mesosphere/mockserver $BRANCH_NAME || echo 'Last commit it not a merge.'"
         }
       }
     }
