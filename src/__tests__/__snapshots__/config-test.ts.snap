@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Config #getProxyHostPort throws an error if nothing is passed as environment variable 1`] = `
+"mockserver needs the PROXY_HOST_PORT environment variable to be set.
+It is used to determine where to send the requests no mock matches against to.
+E.g. PROXY_HOST_PORT='my-service.com:2342'"
+`;
+
+exports[`Config #getProxyHostPort throws an error if the protocol is included in the environment variable 1`] = `"Please remove the protocol from your PROXY_HOST_PORT"`;
