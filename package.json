@@ -89,13 +89,9 @@
     ]
   },
   "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ],
+    "extends": ["@commitlint/config-conventional"],
     "rules": {
-      "scope-case": [
-        0
-      ]
+      "scopes": ["tooling", "release", "proxy", "mockdelivery", "mockdiscovery"]
     }
   },
   "husky": {
