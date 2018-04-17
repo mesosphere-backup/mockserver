@@ -11,13 +11,12 @@
     "commitlint": "commitlint -e",
     "format": "prettier --write '.{/**,}/*.{md,js,ts}' 'package.json'",
     "lint-commit": "commitlint -e $GIT_PARAMS",
-    "pretest": "npm run format",
+    "pretest":
+      "PROXY_HOST_PORT='localhost:4241' npm start& echo $! > .integration-test-server-pid && sleep 3",
     "release": "standard-version",
     "setup:git-hooks": "./scripts/pre-install",
     "prestart": "npm run build",
     "start": "node dist/index.js",
-    "pretest":
-      "PROXY_HOST_PORT='localhost:4241' npm start& echo $! > .integration-test-server-pid && sleep 3",
     "test": "jest",
     "posttest":
       "cat .integration-test-server-pid | xargs kill && rm .integration-test-server-pid",
@@ -68,13 +67,19 @@
         "displayName": "Prettier",
         "runner": "jest-runner-prettier",
         "moduleFileExtensions": ["js", "ts", "md", "json"],
-        "testMatch": ["src/**/*.js", "src/**/*.ts", "**/*.md", "<rootDir>/package.json"]
+        "testMatch": [
+          "src/**/*.js",
+          "src/**/*.ts",
+          "**/*.md",
+          "<rootDir>/package.json"
+        ]
       },
       {
         "displayName": "TsLint",
         "runner": "jest-runner-tslint",
         "moduleFileExtensions": ["ts"],
-        "testMatch": ["**/*.ts"]
+        "testMatch": ["**/*.ts"],
+        "testPathIgnorePatterns": ["/node_modules/", "/src/@types/"]
       }
     ]
   },
@@ -112,6 +117,7 @@
     "jest-junit": "3.6.0",
     "jest-runner-prettier": "0.2.2",
     "jest-runner-tslint": "1.0.4",
+    "node-fetch": "^2.1.2",
     "nodemon": "1.17.3",
     "prettier": "1.12.1",
     "standard-version": "4.3.0",
