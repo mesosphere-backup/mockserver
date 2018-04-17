@@ -4,3 +4,4 @@ dist/
 coverage/
 junit.xml
 
+.integration-test-server-pid
