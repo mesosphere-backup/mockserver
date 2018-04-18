@@ -33,7 +33,7 @@ pipeline {
     }
     stage('Test') {
       steps {
-        sh "npm run test"
+        sh "npm test -- --forceExit"
       }
       post {
         always {
