@@ -11,7 +11,6 @@
     "commitlint": "commitlint -e",
     "format": "prettier --write '.{/**,}/*.{md,js,ts}' 'package.json'",
     "lint-commit": "commitlint -e $GIT_PARAMS",
-    "pretest": "npm run format",
     "release": "standard-version",
     "setup:git-hooks": "./scripts/pre-install",
     "prestart": "npm run build",
@@ -41,6 +40,8 @@
   },
   "jest": {
     "collectCoverage": true,
+    "globalSetup": "<rootDir>/jest/setup.js",
+    "globalTeardown": "<rootDir>/jest/teardown.js",
     "coverageReporters": ["text"],
     "coverageThreshold": {
       "global": {
@@ -64,13 +65,19 @@
         "displayName": "Prettier",
         "runner": "jest-runner-prettier",
         "moduleFileExtensions": ["js", "ts", "md", "json"],
-        "testMatch": ["**/*.ts", "**/*.md", "<rootDir>/package.json"]
+        "testMatch": [
+          "<rootDir>/src/**/*.js",
+          "<rootDir>/src/*.ts",
+          "<rootDir>/src/**/*.ts",
+          "**/*.md"
+        ]
       },
       {
         "displayName": "TsLint",
         "runner": "jest-runner-tslint",
         "moduleFileExtensions": ["ts"],
-        "testMatch": ["**/*.ts"]
+        "testMatch": ["**/*.ts"],
+        "testPathIgnorePatterns": ["/node_modules/", "/src/@types/"]
       }
     ]
   },
@@ -88,6 +95,7 @@
   },
   "dependencies": {
     "express": "4.16.3",
+    "express-http-proxy": "1.1.0",
     "npmlog": "4.1.2"
   },
   "devDependencies": {
@@ -107,6 +115,7 @@
     "jest-junit": "3.6.0",
     "jest-runner-prettier": "0.2.2",
     "jest-runner-tslint": "1.0.4",
+    "node-fetch": "^2.1.2",
     "nodemon": "1.17.3",
     "prettier": "1.12.1",
     "standard-version": "4.3.0",
