@@ -11,15 +11,11 @@
     "commitlint": "commitlint -e",
     "format": "prettier --write '.{/**,}/*.{md,js,ts}' 'package.json'",
     "lint-commit": "commitlint -e $GIT_PARAMS",
-    "pretest":
-      "PROXY_HOST_PORT='localhost:4241' npm start& echo $! > .integration-test-server-pid && sleep 3",
     "release": "standard-version",
     "setup:git-hooks": "./scripts/pre-install",
     "prestart": "npm run build",
     "start": "node dist/index.js",
     "test": "jest",
-    "posttest":
-      "cat .integration-test-server-pid | xargs kill && rm .integration-test-server-pid",
     "watch-node": "nodemon dist/index.js",
     "watch-ts": "tsc -w",
     "prewatch": "npm run build",
@@ -44,6 +40,8 @@
   },
   "jest": {
     "collectCoverage": true,
+    "globalSetup": "<rootDir>/jest/setup.js",
+    "globalTeardown": "<rootDir>/jest/teardown.js",
     "coverageReporters": ["text"],
     "coverageThreshold": {
       "global": {

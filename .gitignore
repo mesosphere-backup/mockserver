@@ -3,5 +3,3 @@ dist/
 .vscode/
 coverage/
 junit.xml
-
-.integration-test-server-pid

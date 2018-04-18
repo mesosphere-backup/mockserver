@@ -17,7 +17,7 @@ function createServer() {
 }
 
 function xhr(options = {}) {
-  return fetch("http://localhost:4241", {
+  return fetch("http://localhost:1111", {
     ...options,
     headers: {
       ...options.headers,
