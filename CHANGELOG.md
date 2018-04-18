@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.0.0"></a>
+
+# [1.0.0](https://github.com/mesosphere/mockserver/compare/v0.1.5...v1.0.0) (2018-04-18)
+
+### Bug Fixes
+
+* **tooling:** include src files in prettier scope ([1dd8336](https://github.com/mesosphere/mockserver/commit/1dd8336))
+
+### Features
+
+* **proxy:** adds support for the PROXY_HOST_PORT environment variable ([cd927e6](https://github.com/mesosphere/mockserver/commit/cd927e6))
+* **proxy:** enable XHR proxying ([08ae2db](https://github.com/mesosphere/mockserver/commit/08ae2db))
+* **tooling:** enable tests against started server ([dbacc27](https://github.com/mesosphere/mockserver/commit/dbacc27))
+
+### BREAKING CHANGES
+
+* **proxy:** Starting the server will throw an error if PROXY_HOST_PORT is not provided. It
+  should be set to the host and port of the application you want to proxy to, e.g.
+  'my-application.com:4567'
+
 <a name="0.1.5"></a>
 
 ## [0.1.5](https://github.com/mesosphere/mockserver/compare/v0.1.4...v0.1.5) (2018-04-17)
