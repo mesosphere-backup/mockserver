@@ -2,19 +2,24 @@ import express from "express";
 import log from "npmlog";
 import { createProxyServer } from "http-proxy";
 
-export default function server(
-  port: number,
-  proxyHostPort: string
-): Promise<null> {
+export interface IServerConfig {
+  port: number;
+  proxyHost: string;
+  proxyPort: number;
+}
+
+export default function server({
+  port,
+  proxyHost,
+  proxyPort
+}: IServerConfig): Promise<null> {
   return new Promise(resolve => {
     const app = express();
-    const targetHost = proxyHostPort.split(":")[0];
-    const targetPort = parseInt(proxyHostPort.split(":")[1], 10);
 
     const proxy = createProxyServer({
       target: {
-        host: targetHost,
-        port: `${targetPort}`
+        host: proxyHost,
+        port: `${proxyPort}`
       },
       ws: true
     });
