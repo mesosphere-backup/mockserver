@@ -8,10 +8,19 @@ export default function server(
 ): Promise<null> {
   return new Promise(resolve => {
     const app = express();
-    const proxy = createProxyServer();
+    const targetHost = proxyHostPort.split(":")[0];
+    const targetPort = parseInt(proxyHostPort.split(":")[1], 10);
+
+    const proxy = createProxyServer({
+      target: {
+        host: targetHost,
+        port: `${targetPort}`
+      },
+      ws: true
+    });
 
     app.use((req, res) => {
-      proxy.web(req, res, { target: `http://${proxyHostPort}` });
+      proxy.web(req, res);
     });
 
     const listener = app.listen(port, () => {
@@ -19,6 +28,10 @@ export default function server(
       const actualPort = listener.address().port;
       log.info("server", `Started mockserver on port ${actualPort}`);
       resolve();
+    });
+
+    listener.on("upgrade", (req, socket, head) => {
+      proxy.ws(req, socket, head);
     });
   });
 }
