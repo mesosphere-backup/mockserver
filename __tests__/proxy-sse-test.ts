@@ -151,6 +151,50 @@ describe("Proxy - Server Sent Events", () => {
       expect(callTimeSecond - callTimeFirst).toBeGreaterThanOrEqual(200);
     });
 
+    it("forwards data in the same order", async () => {
+      s.app.use((req, res) => {
+        res.sseSendUntyped({ count: 1 });
+        setTimeout(() => {
+          res.sseSendUntyped({ count: 2 });
+          res.end();
+        }, 800);
+      });
+
+      const mockOnMessage = jest.fn();
+      let callCount = 0;
+      await sse(msPort, {
+        onmessage: (evt, resolve) => {
+          callCount++;
+          mockOnMessage(JSON.parse(evt.data).count);
+          if (callCount === 2) {
+            resolve();
+          }
+        }
+      });
+
+      const firstCall = mockOnMessage.mock.calls[0][0];
+      const secondCall = mockOnMessage.mock.calls[1][0];
+      expect(firstCall).toBe(1);
+      expect(secondCall).toBe(2);
+    });
+
+    it("forwards untyped data events", async () => {
+      s.app.use((req, res) => {
+        res.sseSendUntyped({ foo: "my-untyped-message" });
+        res.end();
+      });
+
+      const mockOnMessage = jest.fn();
+
+      const msg = await sse(msPort, {
+        onmessage: (evt, resolve) => {
+          resolve(JSON.parse(evt.data));
+        }
+      });
+
+      expect(msg).toEqual({ foo: "my-untyped-message" });
+    });
+
     it("forwards typed data events", async () => {
       s.app.use((req, res) => {
         res.sseSendTyped("typeA", { count: 1 });
