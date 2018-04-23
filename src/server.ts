@@ -11,8 +11,10 @@ export default function server(
 
     app.use(proxy(proxyHostPort));
 
-    app.listen(port, () => {
-      log.info("server", `Started mockserver on port ${port}`);
+    const listener = app.listen(port, () => {
+      // If 0 is passed as a port express searches a port for you
+      const actualPort = listener.address().port;
+      log.info("server", `Started mockserver on port ${actualPort}`);
       resolve();
     });
   });

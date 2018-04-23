@@ -1,6 +1,6 @@
 {
   "name": "mockserver",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description":
     "A mockserver that allows you to mock XHR, long-polling XHR, server sent events and websocket connections",
   "main": "dist/index.js",
@@ -15,6 +15,7 @@
     "setup:git-hooks": "./scripts/pre-install",
     "prestart": "npm run build",
     "start": "node dist/index.js",
+    "pretest": "npm run build",
     "test": "jest",
     "watch-node": "nodemon dist/index.js",
     "watch-ts": "tsc -w",
@@ -40,8 +41,6 @@
   },
   "jest": {
     "collectCoverage": true,
-    "globalSetup": "<rootDir>/jest/setup.js",
-    "globalTeardown": "<rootDir>/jest/teardown.js",
     "coverageReporters": ["text"],
     "coverageThreshold": {
       "global": {
@@ -59,7 +58,8 @@
           "^.+\\.ts$": "ts-jest"
         },
         "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(js|ts)$",
-        "moduleFileExtensions": ["ts", "js", "json"]
+        "moduleFileExtensions": ["ts", "js", "json"],
+        "testPathIgnorePatterns": ["/node_modules/", "/helpers/"]
       },
       {
         "displayName": "Prettier",
@@ -119,7 +119,7 @@
     "nodemon": "1.17.3",
     "prettier": "1.12.1",
     "standard-version": "4.3.0",
-    "ts-jest": "22.4.3",
+    "ts-jest": "22.4.4",
     "tslint": "5.9.1",
     "tslint-config-prettier": "1.12.0",
     "tslint-eslint-rules": "5.1.0",
