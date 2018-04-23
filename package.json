@@ -95,7 +95,7 @@
   },
   "dependencies": {
     "express": "4.16.3",
-    "express-http-proxy": "1.1.0",
+    "express-http-proxy": "1.2.0",
     "npmlog": "4.1.2"
   },
   "devDependencies": {
