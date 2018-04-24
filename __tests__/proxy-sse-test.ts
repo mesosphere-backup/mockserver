@@ -5,12 +5,12 @@ import createServer from "./helpers/createServer";
 import MockServerController from "./helpers/mockServerController";
 
 interface IEventListener {
-  cb: (evt: Event) => void;
+  cb: (evt: MessageEvent) => void;
   type: string;
 }
 interface ICallbacks {
-  onmessage?: (evt: Event, resolve: (...any) => void) => void;
-  onerror?: (evt: Event, resolve: (...any) => void) => void;
+  onmessage?: (evt: MessageEvent, resolve: (...any) => void) => void;
+  onerror?: (evt: MessageEvent, resolve: (...any) => void) => void;
   eventListeners?: IEventListener[];
 }
 
