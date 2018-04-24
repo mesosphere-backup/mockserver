@@ -1,5 +1,5 @@
 import express from "express";
-import expressHTTPProxy from "express-http-proxy";
+import { createProxyServer } from "http-proxy";
 import server from "../server";
 
 const mockExpressApp = express();
@@ -21,9 +21,16 @@ describe("Server", () => {
   });
 
   describe("Proxy", () => {
-    it("uses express-http-proxy", async () => {
+    it("uses http-proxy", async () => {
       await server(3223, "google.com:80");
-      expect(expressHTTPProxy).toHaveBeenCalled();
+      expect(createProxyServer).toHaveBeenCalled();
+      const mockProxy = createProxyServer();
+      const app = express();
+      app.use.mock.calls[0][0]({ request: true }, { response: true });
+      expect(mockProxy.web).toHaveBeenCalled();
+      expect(mockProxy.web.mock.calls[0][2].target).toBe(
+        "http://google.com:80"
+      );
     });
   });
 });
