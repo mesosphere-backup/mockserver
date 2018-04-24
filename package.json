@@ -1,6 +1,6 @@
 {
   "name": "mockserver",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description":
     "A mockserver that allows you to mock XHR, long-polling XHR, server sent events and websocket connections",
   "main": "dist/index.js",
