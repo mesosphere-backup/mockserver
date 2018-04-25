@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.2.0"></a>
+
+# [1.2.0](https://github.com/mesosphere/mockserver/compare/v1.1.0...v1.2.0) (2018-04-25)
+
+### Features
+
+* **proxy:** add websocket support ([d0ce77a](https://github.com/mesosphere/mockserver/commit/d0ce77a))
+* **proxy:** enable server sent events ([2e19a34](https://github.com/mesosphere/mockserver/commit/2e19a34))
+
 <a name="1.1.0"></a>
 
 # [1.1.0](https://github.com/mesosphere/mockserver/compare/v1.0.8...v1.1.0) (2018-04-24)

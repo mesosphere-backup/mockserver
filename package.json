@@ -1,7 +1,8 @@
 {
   "name": "mockserver",
-  "version": "1.1.0",
-  "description": "A mockserver that allows you to mock XHR, long-polling XHR, server sent events and websocket connections",
+  "version": "1.2.0",
+  "description":
+    "A mockserver that allows you to mock XHR, long-polling XHR, server sent events and websocket connections",
   "main": "dist/index.js",
   "scripts": {
     "build-ts": "tsc",
@@ -19,17 +20,14 @@
     "watch-node": "nodemon dist/index.js",
     "watch-ts": "tsc -w",
     "prewatch": "npm run build",
-    "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\"  \"npm run watch-ts\" \"npm run watch-node\""
+    "watch":
+      "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\"  \"npm run watch-ts\" \"npm run watch-node\""
   },
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/mesosphere/mockserver.git"
   },
-  "keywords": [
-    "mock",
-    "mockserver",
-    "testing"
-  ],
+  "keywords": ["mock", "mockserver", "testing"],
   "author": "DanielMSchmidt <dschmidt@mesosphere.com>",
   "license": "MIT",
   "homepage": "https://github.com/mesosphere/mockserver#readme",
@@ -43,9 +41,7 @@
   },
   "jest": {
     "collectCoverage": true,
-    "coverageReporters": [
-      "text"
-    ],
+    "coverageReporters": ["text"],
     "coverageThreshold": {
       "global": {
         "branches": 100,
@@ -62,25 +58,13 @@
           "^.+\\.ts$": "ts-jest"
         },
         "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(js|ts)$",
-        "moduleFileExtensions": [
-          "ts",
-          "js",
-          "json"
-        ],
-        "testPathIgnorePatterns": [
-          "/node_modules/",
-          "/helpers/"
-        ]
+        "moduleFileExtensions": ["ts", "js", "json"],
+        "testPathIgnorePatterns": ["/node_modules/", "/helpers/"]
       },
       {
         "displayName": "Prettier",
         "runner": "jest-runner-prettier",
-        "moduleFileExtensions": [
-          "js",
-          "ts",
-          "md",
-          "json"
-        ],
+        "moduleFileExtensions": ["js", "ts", "md", "json"],
         "testMatch": [
           "<rootDir>/src/**/*.js",
           "<rootDir>/src/*.ts",
@@ -91,27 +75,16 @@
       {
         "displayName": "TsLint",
         "runner": "jest-runner-tslint",
-        "moduleFileExtensions": [
-          "ts"
-        ],
-        "testMatch": [
-          "**/*.ts"
-        ],
-        "testPathIgnorePatterns": [
-          "/node_modules/",
-          "/src/@types/"
-        ]
+        "moduleFileExtensions": ["ts"],
+        "testMatch": ["**/*.ts"],
+        "testPathIgnorePatterns": ["/node_modules/", "/src/@types/"]
       }
     ]
   },
   "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ],
+    "extends": ["@commitlint/config-conventional"],
     "rules": {
-      "scope-case": [
-        0
-      ]
+      "scope-case": [0]
     }
   },
   "husky": {
