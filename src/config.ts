@@ -1,4 +1,5 @@
 import log from "npmlog";
+import { IServerConfig } from "./server";
 
 export function getPort(): number {
   return process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
@@ -28,4 +29,22 @@ E.g. PROXY_HOST_PORT='my-service.com:2342'`
   }
 
   return proxyHostPort;
+}
+
+export function getProxyHost(hostPort: string): string {
+  return hostPort.split(":")[0];
+}
+
+export function getProxyPort(hostPort: string): number {
+  return parseInt(hostPort.split(":")[1], 10);
+}
+
+export default function getConfig() {
+  const proxyHostPort = getProxyHostPort();
+
+  return {
+    port: getPort(),
+    proxyHost: getProxyHost(proxyHostPort),
+    proxyPort: getProxyPort(proxyHostPort)
+  };
 }

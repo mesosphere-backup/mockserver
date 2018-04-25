@@ -1,21 +1,19 @@
 import log from "npmlog";
 
 import server from "./server";
-import { getPort, getProxyHostPort } from "./config";
+import getConfig from "./config";
 
-let hostPort;
-let port;
+let config;
 
 try {
-  hostPort = getProxyHostPort();
-  port = getPort();
+  config = getConfig();
 } catch (e) {
   log.error("setup", e.message);
   process.exit(1);
 }
 
 try {
-  server(port, hostPort);
+  server(config);
 } catch (e) {
   log.error("run", e.message);
   process.exit(1);
