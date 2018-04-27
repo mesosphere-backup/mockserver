@@ -1,5 +1,10 @@
 import log from "npmlog";
-import { getPort, getProxyHostPort } from "../config";
+import getConfig, {
+  getPort,
+  getProxyHostPort,
+  getProxyHost,
+  getProxyPort
+} from "../config";
 
 describe("Config", () => {
   beforeEach(() => {
@@ -47,6 +52,33 @@ describe("Config", () => {
       const hostPort = getProxyHostPort();
       expect(hostPort).toBe("my-application.com:80");
       expect(log.warn).toHaveBeenCalled();
+    });
+  });
+
+  describe("#getProxyHost", () => {
+    it("extracts the proxy host", () => {
+      expect(getProxyHost("google.de:80")).toBe("google.de");
+    });
+  });
+
+  describe("#getProxyPort", () => {
+    it("extracts the proxy port", () => {
+      expect(getProxyPort("google.de:80")).toBe(80);
+    });
+  });
+
+  describe("#getConfig", () => {
+    it("returns a complete configuration", () => {
+      process.env.PROXY_HOST_PORT = "my-application.com:1234";
+      process.env.PORT = "4002";
+
+      expect(getConfig()).toEqual({
+        port: 4002,
+        proxyPort: 1234,
+        proxyHost: "my-application.com"
+      });
+
+      process.env.PORT = undefined;
     });
   });
 });

@@ -1,3 +1,5 @@
+const eventHandlerMock = jest.fn();
+
 const app = {
   use: jest.fn(),
   listen: jest.fn((port, cb) => {
@@ -6,7 +8,8 @@ const app = {
     return {
       address: jest.fn(() => ({
         port: 4242
-      }))
+      })),
+      on: eventHandlerMock
     };
   })
 };
