@@ -1,12 +1,7 @@
 import express from "express";
 import log from "npmlog";
 import { createProxyServer } from "http-proxy";
-
-export interface IServerConfig {
-  port: number;
-  proxyHost: string;
-  proxyPort: number;
-}
+import { IServerConfig } from "./types";
 
 export default function server({
   port,

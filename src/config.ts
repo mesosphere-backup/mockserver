@@ -1,5 +1,5 @@
 import log from "npmlog";
-import { IServerConfig } from "./server";
+import { IConfig } from "./types";
 
 export function getPort(): number {
   return process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
@@ -39,7 +39,7 @@ export function getProxyPort(hostPort: string): number {
   return parseInt(hostPort.split(":")[1], 10);
 }
 
-export default function getConfig() {
+export default function getConfig(): IConfig {
   const proxyHostPort = getProxyHostPort();
 
   return {
