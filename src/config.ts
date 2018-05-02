@@ -1,6 +1,16 @@
 import log from "npmlog";
 import { IConfig } from "./types";
 
+export function getMockSearchExpression(): string {
+  const mockSearchExpression = process.env.MOCK_SEARCH_EXPRESSION;
+  if (!mockSearchExpression) {
+    throw new Error(`mockserver needs the MOCK_SEARCH_EXPRESSION environment variable to be set.
+    It is used to determine where to look for the mocks and it's expected to be a glob expression.`);
+  }
+
+  return mockSearchExpression;
+}
+
 export function getPort(): number {
   return process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 }
@@ -45,6 +55,7 @@ export default function getConfig(): IConfig {
   return {
     port: getPort(),
     proxyHost: getProxyHost(proxyHostPort),
-    proxyPort: getProxyPort(proxyHostPort)
+    proxyPort: getProxyPort(proxyHostPort),
+    mockSearchExpression: getMockSearchExpression()
   };
 }

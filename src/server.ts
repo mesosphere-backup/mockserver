@@ -6,7 +6,8 @@ import { IServerConfig } from "./types";
 export default function server({
   port,
   proxyHost,
-  proxyPort
+  proxyPort,
+  mocks
 }: IServerConfig): Promise<null> {
   return new Promise(resolve => {
     const app = express();

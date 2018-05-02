@@ -94,7 +94,9 @@
     }
   },
   "dependencies": {
+    "@types/glob": "^5.0.35",
     "express": "4.16.3",
+    "glob": "^7.1.2",
     "http-proxy": "1.17.0",
     "node": "10.0.0",
     "npm": "6.0.0",
