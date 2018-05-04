@@ -24,41 +24,4 @@ describe("Server", () => {
       );
     });
   });
-
-  describe("Proxy", () => {
-    it("uses http-proxy's web method", async () => {
-      await server({
-        port: 3223,
-        proxyHost: "google.com",
-        proxyPort: 80,
-        mockSearchExpression: "./unkonwn-path"
-      });
-      expect(createProxyServer).toHaveBeenCalled();
-      const mockProxy = createProxyServer();
-      const app = express();
-      app.use.mock.calls[0][0]({ request: true }, { response: true });
-      expect(mockProxy.web).toHaveBeenCalled();
-    });
-
-    it("uses http-proxy's ws method", async () => {
-      await server({
-        port: 3223,
-        proxyHost: "google.com",
-        proxyPort: 80,
-        mockSearchExpression: "./unkonwn-path"
-      });
-      expect(createProxyServer).toHaveBeenCalled();
-      const mockProxy = createProxyServer();
-      const app = express();
-      const listener = app.listen(80);
-
-      expect(listener.on.mock.calls[0][0]).toBe("upgrade");
-      listener.on.mock.calls[0][1](
-        { request: true },
-        { socket: true },
-        { head: true }
-      );
-      expect(mockProxy.ws).toHaveBeenCalled();
-    });
-  });
 });
