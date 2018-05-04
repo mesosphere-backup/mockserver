@@ -15,7 +15,7 @@ export default class MockServerController {
   public async start() {
     return new Promise(async (resolve, reject) => {
       // This relies on the build to be run before
-      const server = spawn("node", ["dist/index.js"], {
+      const server = spawn("node", ["dist/cli.js"], {
         shell: true,
         cwd: process.cwd(),
         env: {
