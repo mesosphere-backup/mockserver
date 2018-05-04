@@ -1,3 +1,5 @@
+import { Request, Response } from "express";
+
 export interface IMock {
   id: string;
   request: (req: Request, res: Response) => void;
