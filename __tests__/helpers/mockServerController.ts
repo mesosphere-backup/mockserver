@@ -6,9 +6,11 @@ interface IExpressServer {
 
 export default class MockServerController {
   private targetPort: number;
+  private mockSearchExpression: string;
   private server: IExpressServer;
 
-  constructor(port: number) {
+  constructor(port: number, mockSearchExpression?: string) {
+    this.mockSearchExpression = mockSearchExpression || "./non-existant-folder";
     this.targetPort = port;
   }
 
@@ -22,7 +24,7 @@ export default class MockServerController {
           PATH: process.env.PATH,
           PROXY_HOST_PORT: `localhost:${this.targetPort}`,
           PORT: "0",
-          MOCK_SEARCH_EXPRESSION: "./non-existant-folder"
+          MOCK_SEARCH_EXPRESSION: this.mockSearchExpression
         }
       });
 
@@ -35,7 +37,10 @@ export default class MockServerController {
 
         // wait for the start command
         if (str.includes("Started mockserver on port")) {
-          const port = parseInt(str.match(/\d+/)[0], 10);
+          const port = parseInt(
+            str.split("Started mockserver on port")[1].match(/\d+/)[0],
+            10
+          );
           resolve(port);
         }
       };
@@ -43,6 +48,8 @@ export default class MockServerController {
       server.stdout.on("data", awaitServerStart);
       server.stderr.on("data", awaitServerStart);
 
+      // tslint:disable-next-line
+      server.stderr.on("data", data => console.error(String(data)));
       this.server = server;
     });
   }
