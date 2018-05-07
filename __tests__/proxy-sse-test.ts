@@ -70,8 +70,8 @@ describe("Proxy - Server Sent Events", () => {
     });
   });
 
-  afterEach(() => {
-    msController.stop();
+  afterEach(async () => {
+    await msController.stop();
     s.server.close();
   });
 
@@ -231,10 +231,8 @@ describe("Proxy - Server Sent Events", () => {
       expect(mockTypeC).not.toHaveBeenCalled();
     });
 
-    it("forwards errors", async () => {
+    it("invokes error callback if no event is sent", async () => {
       s.app.use((req, res) => {
-        res.status(500);
-        res.send("We had an internal server error");
         res.end();
       });
 

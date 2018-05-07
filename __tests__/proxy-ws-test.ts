@@ -40,8 +40,8 @@ describe("Proxy - XHR", () => {
     msPort = await msController.start();
   });
 
-  afterEach(() => {
-    msController.stop();
+  afterEach(async () => {
+    await msController.stop();
     s.server.close();
   });
 
