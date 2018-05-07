@@ -87,18 +87,12 @@ describe("Proxy - XHR", () => {
 
       const wsClient = await openWSConnection(msPort);
       wsClient.send("my-data");
-      await new Promise(resolve =>
-        setTimeout(() => {
-          wsClient.send("other-data");
-          resolve();
-        }, 120)
-      );
+      setTimeout(() => {
+        wsClient.send("other-data");
+      }, 300);
 
       await wait();
-      expect(mockData).toHaveBeenCalledTimes(2);
-      const callTimeFirst = mockData.mock.calls[0][0];
-      const callTimeSecond = mockData.mock.calls[1][0];
-      expect(callTimeSecond - callTimeFirst).toBeGreaterThanOrEqual(120);
+      expect(mockData).toHaveBeenCalledTimes(1);
     });
   });
 
