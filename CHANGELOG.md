@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="2.0.0"></a>
+
+# [2.0.0](https://github.com/mesosphere/mockserver/compare/v1.2.4...v2.0.0) (2018-05-09)
+
+### Features
+
+* **mocks:** implement mock discovery ([c1072f7](https://github.com/mesosphere/mockserver/commit/c1072f7))
+
+### BREAKING CHANGES
+
+* **mocks:** the environment variable was not necessary before. Set it to
+  an non-existant path as a default, so that the behaviour does not
+  change for you
+
+Closes DCOS-21972
+
 <a name="1.2.4"></a>
 
 ## [1.2.4](https://github.com/mesosphere/mockserver/compare/v1.2.3...v1.2.4) (2018-05-03)
