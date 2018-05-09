@@ -3,7 +3,8 @@ import getConfig, {
   getPort,
   getProxyHostPort,
   getProxyHost,
-  getProxyPort
+  getProxyPort,
+  getMockSearchExpression
 } from "../config";
 
 describe("Config", () => {
@@ -67,15 +68,36 @@ describe("Config", () => {
     });
   });
 
+  describe("#getMockSearchExpression", () => {
+    afterEach(() => {
+      delete process.env.MOCK_SEARCH_EXPRESSION;
+    });
+
+    it("fails without the environment variable", () => {
+      expect(() => {
+        getMockSearchExpression();
+      }).toThrowErrorMatchingSnapshot();
+    });
+
+    it("returns the expression", () => {
+      const expr = "./**/*-spec.js";
+      process.env.MOCK_SEARCH_EXPRESSION = expr;
+
+      expect(getMockSearchExpression()).toBe(expr);
+    });
+  });
+
   describe("#getConfig", () => {
     it("returns a complete configuration", () => {
+      process.env.MOCK_SEARCH_EXPRESSION = "./**/__tests__/*-spec.js";
       process.env.PROXY_HOST_PORT = "my-application.com:1234";
       process.env.PORT = "4002";
 
       expect(getConfig()).toEqual({
         port: 4002,
         proxyPort: 1234,
-        proxyHost: "my-application.com"
+        proxyHost: "my-application.com",
+        mockSearchExpression: "./**/__tests__/*-spec.js"
       });
 
       process.env.PORT = undefined;
