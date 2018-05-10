@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`mocks #extractMocks fails malformed mock data (missing id) 1`] = `"The mock export at index 0 at 1-invalid-mock-without-id does not include a valid id: {}"`;
+
+exports[`mocks #extractMocks fails with object given an invalid id 1`] = `"The mock export at index 0 at 1-invalid-mock-with-invalid-id does not include a valid id: {\\"id\\":42}"`;
+
+exports[`mocks #extractMocks fails with something not a function given as mock 1`] = `"The mock export at index 0 at 1-invalid-mock-invalid-request does not include a valid request: {\\"id\\":\\"42\\",\\"request\\":23}"`;
+
+exports[`mocks #extractMocks fails without given mock function 1`] = `"The mock export at index 0 at 1-invalid-mock-without-request does not include a valid request: {\\"id\\":\\"32\\"}"`;

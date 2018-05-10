@@ -11,7 +11,12 @@ describe("Server", () => {
 
   describe("API", () => {
     it("resolves a promise once it initializes", async () => {
-      await server({ port: 3223, proxyHost: "google.com", proxyPort: 80 });
+      await server({
+        port: 3223,
+        proxyHost: "google.com",
+        proxyPort: 80,
+        mockSearchExpression: "./unkonwn-path"
+      });
       expect(mockExpressApp.use).toHaveBeenCalled();
       expect(mockExpressApp.listen).toHaveBeenCalledWith(
         3223,
@@ -22,7 +27,12 @@ describe("Server", () => {
 
   describe("Proxy", () => {
     it("uses http-proxy's web method", async () => {
-      await server({ port: 3223, proxyHost: "google.com", proxyPort: 80 });
+      await server({
+        port: 3223,
+        proxyHost: "google.com",
+        proxyPort: 80,
+        mockSearchExpression: "./unkonwn-path"
+      });
       expect(createProxyServer).toHaveBeenCalled();
       const mockProxy = createProxyServer();
       const app = express();
@@ -31,7 +41,12 @@ describe("Server", () => {
     });
 
     it("uses http-proxy's ws method", async () => {
-      await server({ port: 3223, proxyHost: "google.com", proxyPort: 80 });
+      await server({
+        port: 3223,
+        proxyHost: "google.com",
+        proxyPort: 80,
+        mockSearchExpression: "./unkonwn-path"
+      });
       expect(createProxyServer).toHaveBeenCalled();
       const mockProxy = createProxyServer();
       const app = express();
