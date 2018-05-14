@@ -21,7 +21,8 @@ export default class MockServerController {
         env: {
           PATH: process.env.PATH,
           PROXY_HOST_PORT: `localhost:${this.targetPort}`,
-          PORT: "0"
+          PORT: "0",
+          MOCK_SEARCH_EXPRESSION: "./non-existant-folder"
         }
       });
 

@@ -1,5 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Config #getMockSearchExpression fails without the environment variable 1`] = `
+"mockserver needs the MOCK_SEARCH_EXPRESSION environment variable to be set.
+    It is used to determine where to look for the mocks and it's expected to be a glob expression."
+`;
+
 exports[`Config #getProxyHostPort throws an error if nothing is passed as environment variable 1`] = `
 "mockserver needs the PROXY_HOST_PORT environment variable to be set.
 It is used to determine where to send the requests no mock matches against to.
