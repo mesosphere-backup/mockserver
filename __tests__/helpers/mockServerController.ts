@@ -48,7 +48,6 @@ export default class MockServerController {
       server.stdout.on("data", awaitServerStart);
       server.stderr.on("data", awaitServerStart);
 
-      // tslint:disable-next-line
       server.stderr.on("data", data => console.error(String(data)));
       this.server = server;
     });

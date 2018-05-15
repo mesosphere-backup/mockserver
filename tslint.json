@@ -1,5 +1,8 @@
 {
   "extends": ["@dcos/tslint-config"],
+  "rules": {
+    "no-console": false
+  },
   "linterOptions": {
     "exclude": ["./dist/**/*", "./typings/*"]
   }
