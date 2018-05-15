@@ -2,7 +2,8 @@
   "name": "mockserver",
   "version": "2.0.1",
   "description": "A mockserver that allows you to mock XHR, long-polling XHR, server sent events and websocket connections",
-  "main": "dist/index.js",
+  "main": "dist/server.js",
+  "bin": "dist/cli.js",
   "scripts": {
     "build-ts": "tsc",
     "build": "npm run build-ts",
@@ -46,14 +47,6 @@
     "coverageReporters": [
       "text"
     ],
-    "coverageThreshold": {
-      "global": {
-        "branches": 100,
-        "functions": 100,
-        "lines": 100,
-        "statements": 100
-      }
-    },
     "testResultsProcessor": "jest-junit",
     "projects": [
       {
@@ -61,7 +54,7 @@
         "transform": {
           "^.+\\.ts$": "ts-jest"
         },
-        "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(js|ts)$",
+        "testRegex": "/__tests__/.*-test.ts$",
         "moduleFileExtensions": [
           "ts",
           "js",

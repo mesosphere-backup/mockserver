@@ -25,8 +25,8 @@ describe("Proxy - XHR", () => {
     msPort = await msController.start();
   });
 
-  afterEach(() => {
-    msController.stop();
+  afterEach(async () => {
+    await msController.stop();
     s.server.close();
   });
 
@@ -40,7 +40,7 @@ describe("Proxy - XHR", () => {
       });
     });
 
-    it("forwards the request", async () => {
+    it.only("forwards the request", async () => {
       await xhr(msPort);
 
       expect(mockMiddleware).toHaveBeenCalled();
