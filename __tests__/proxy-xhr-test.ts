@@ -1,8 +1,7 @@
 jest.unmock("node-fetch");
 
 import fetch from "node-fetch";
-import createServer from "./helpers/createServer";
-import MockServerController from "./helpers/mockServerController";
+import IntegrationTestEnvironment from "./helpers/integrationTestEnvironment";
 
 function xhr(port, options = {}) {
   return fetch(`http://localhost:${port}`, {
@@ -15,53 +14,49 @@ function xhr(port, options = {}) {
 }
 
 describe("Proxy - XHR", () => {
-  let s;
-  let msPort;
-  let msController;
+  let env;
 
   beforeEach(async () => {
-    s = await createServer();
-    msController = new MockServerController(s.port);
-    msPort = await msController.start();
+    env = new IntegrationTestEnvironment();
+    await env.setup();
   });
 
   afterEach(async () => {
-    await msController.stop();
-    s.server.close();
+    await env.teardown();
   });
 
   describe("Requests", () => {
     let mockMiddleware;
     beforeEach(() => {
       mockMiddleware = jest.fn();
-      s.app.use((req, res) => {
+      env.proxyTargetApp.use((req, res) => {
         mockMiddleware(req);
         res.json({ done: true });
       });
     });
 
-    it.only("forwards the request", async () => {
-      await xhr(msPort);
+    it("forwards the request", async () => {
+      await xhr(env.port);
 
       expect(mockMiddleware).toHaveBeenCalled();
     });
 
     it("forwards the headers", async () => {
-      await xhr(msPort, { headers: { "my-header": "is-awesome" } });
+      await xhr(env.port, { headers: { "my-header": "is-awesome" } });
 
       const call = mockMiddleware.mock.calls[0][0];
       expect(call.headers["my-header"]).toBe("is-awesome");
     });
 
     it("forwards the method", async () => {
-      await xhr(msPort, { method: "POST" });
+      await xhr(env.port, { method: "POST" });
 
       const call = mockMiddleware.mock.calls[0][0];
       expect(call.method).toBe("POST");
     });
 
     it("forwards the body", async () => {
-      await xhr(msPort, {
+      await xhr(env.port, {
         method: "POST",
         body: JSON.stringify({ foo: "bar" })
       });
@@ -73,7 +68,7 @@ describe("Proxy - XHR", () => {
 
   describe("Response", () => {
     beforeEach(() => {
-      s.app.use((req, res) => {
+      env.proxyTargetApp.use((req, res) => {
         res.set("x-b3-span-id", "my-tracing");
         res.status(201);
         res.json({ done: true });
@@ -81,17 +76,17 @@ describe("Proxy - XHR", () => {
     });
 
     it("forwards the headers", async () => {
-      const response = await xhr(msPort);
+      const response = await xhr(env.port);
       expect(response.headers.get("x-b3-span-id")).toBe("my-tracing");
     });
 
     it("forwards the status code", async () => {
-      const response = await xhr(msPort);
+      const response = await xhr(env.port);
       expect(response.status).toBe(201);
     });
 
     it("forwards the body", async () => {
-      const response = await xhr(msPort).then(res => res.json());
+      const response = await xhr(env.port).then(res => res.json());
       expect(response.done).toBe(true);
     });
   });

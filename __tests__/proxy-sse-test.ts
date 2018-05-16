@@ -1,8 +1,7 @@
 jest.unmock("eventsource");
 
 import EventSource from "eventsource";
-import createServer from "./helpers/createServer";
-import MockServerController from "./helpers/mockServerController";
+import IntegrationTestEnvironment from "./helpers/integrationTestEnvironment";
 
 interface IEventListener {
   cb: (evt: MessageEvent) => void;
@@ -41,16 +40,13 @@ function sse(
 }
 
 describe("Proxy - Server Sent Events", () => {
-  let s;
-  let msController;
-  let msPort;
+  let env;
 
   beforeEach(async () => {
-    s = await createServer();
-    msController = new MockServerController(s.port);
-    msPort = await msController.start();
+    env = new IntegrationTestEnvironment();
+    await env.setup();
 
-    s.app.use((req, res, next) => {
+    env.proxyTargetApp.use((req, res, next) => {
       res.writeHead(200, {
         "Content-Type": "text/event-stream",
         "Cache-Control": "no-cache",
@@ -71,15 +67,14 @@ describe("Proxy - Server Sent Events", () => {
   });
 
   afterEach(async () => {
-    await msController.stop();
-    s.server.close();
+    await env.teardown();
   });
 
   describe("Requests", () => {
     let mockMiddleware;
     beforeEach(() => {
       mockMiddleware = jest.fn();
-      s.app.use((req, res) => {
+      env.proxyTargetApp.use((req, res) => {
         mockMiddleware(req);
         res.sseSendUntyped({ done: true });
         res.end();
@@ -87,14 +82,18 @@ describe("Proxy - Server Sent Events", () => {
     });
 
     it("opens a connection", async () => {
-      const source = await sse(msPort);
+      const source = await sse(env.port);
 
       source.close();
       expect(mockMiddleware).toHaveBeenCalled();
     });
 
     it("sends the headers", async () => {
-      const source = await sse(msPort, {}, { headers: { "my-header": "foo" } });
+      const source = await sse(
+        env.port,
+        {},
+        { headers: { "my-header": "foo" } }
+      );
 
       source.close();
       const call = mockMiddleware.mock.calls[0][0];
@@ -104,7 +103,7 @@ describe("Proxy - Server Sent Events", () => {
 
   describe("Response", () => {
     it("forwards data", async () => {
-      s.app.use((req, res) => {
+      env.proxyTargetApp.use((req, res) => {
         res.sseSendUntyped({ count: 1 });
         res.sseSendUntyped({ count: 2 });
         res.end();
@@ -112,7 +111,7 @@ describe("Proxy - Server Sent Events", () => {
 
       const mockOnMessage = jest.fn();
       let callCount = 0;
-      await sse(msPort, {
+      await sse(env.port, {
         onmessage: (evt, resolve) => {
           callCount++;
           mockOnMessage();
@@ -125,7 +124,7 @@ describe("Proxy - Server Sent Events", () => {
     });
 
     it("forwards data with a similar interval", async () => {
-      s.app.use((req, res) => {
+      env.proxyTargetApp.use((req, res) => {
         res.sseSendUntyped({ count: 1 });
         setTimeout(() => {
           res.sseSendUntyped({ count: 2 });
@@ -134,7 +133,7 @@ describe("Proxy - Server Sent Events", () => {
       });
 
       const mockOnMessage = jest.fn();
-      await sse(msPort, {
+      await sse(env.port, {
         onmessage: (evt, resolve) => {
           mockOnMessage(evt);
           resolve();
@@ -145,7 +144,7 @@ describe("Proxy - Server Sent Events", () => {
     });
 
     it("forwards data in the same order", async () => {
-      s.app.use((req, res) => {
+      env.proxyTargetApp.use((req, res) => {
         res.sseSendUntyped({ count: 1 });
         res.sseSendUntyped({ count: 2 });
         res.end();
@@ -153,7 +152,7 @@ describe("Proxy - Server Sent Events", () => {
 
       const mockOnMessage = jest.fn();
       let callCount = 0;
-      await sse(msPort, {
+      await sse(env.port, {
         onmessage: (evt, resolve) => {
           callCount++;
           mockOnMessage(JSON.parse(evt.data).count);
@@ -169,14 +168,14 @@ describe("Proxy - Server Sent Events", () => {
     });
 
     it("forwards untyped data events", async () => {
-      s.app.use((req, res) => {
+      env.proxyTargetApp.use((req, res) => {
         res.sseSendUntyped({ foo: "my-untyped-message" });
         res.end();
       });
 
       const mockOnMessage = jest.fn();
 
-      const msg = await sse(msPort, {
+      const msg = await sse(env.port, {
         onmessage: (evt, resolve) => {
           resolve(JSON.parse(evt.data));
         }
@@ -186,7 +185,7 @@ describe("Proxy - Server Sent Events", () => {
     });
 
     it("forwards typed data events", async () => {
-      s.app.use((req, res) => {
+      env.proxyTargetApp.use((req, res) => {
         res.sseSendTyped("typeA", { count: 1 });
         res.sseSendTyped("typeB", { count: 2 });
         res.sseSendUntyped({ end: true });
@@ -196,7 +195,7 @@ describe("Proxy - Server Sent Events", () => {
       const mockTypeA = jest.fn();
       const mockTypeB = jest.fn();
       const mockTypeC = jest.fn();
-      await sse(msPort, {
+      await sse(env.port, {
         onmessage: (evt, resolve) => resolve(),
         eventListeners: [
           {
@@ -222,11 +221,11 @@ describe("Proxy - Server Sent Events", () => {
     });
 
     it("invokes error callback if no event is sent", async () => {
-      s.app.use((req, res) => {
+      env.proxyTargetApp.use((req, res) => {
         res.end();
       });
 
-      const error = await sse(msPort, {
+      const error = await sse(env.port, {
         onerror: (evt, resolve) => resolve(evt)
       });
 
