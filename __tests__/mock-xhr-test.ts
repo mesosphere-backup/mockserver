@@ -1,8 +1,7 @@
 jest.unmock("node-fetch");
 
 import fetch from "node-fetch";
-import createServer from "./helpers/createServer";
-import MockServerController from "./helpers/mockServerController";
+import IntegrationTestEnvironment from "./helpers/integrationTestEnvironment";
 
 function xhr(port, options = {}) {
   return fetch(`http://localhost:${port}`, {
@@ -15,27 +14,23 @@ function xhr(port, options = {}) {
 }
 
 describe("Mock - XHR", () => {
-  let s;
-  let msPort;
-  let msController;
+  let env;
 
   beforeEach(async () => {
-    s = await createServer();
-    msController = new MockServerController(s.port, "./**/mock-xhr-mocks.js");
-    msPort = await msController.start();
+    env = new IntegrationTestEnvironment("./**/mock-xhr-mocks.js");
+    await env.setup();
   });
 
-  afterEach(() => {
-    msController.stop();
-    s.server.close();
+  afterEach(async () => {
+    await env.teardown();
   });
 
   describe("request handling", () => {
     it("switches mock depending on cookie", async () => {
-      const responseA = await xhr(msPort, {
+      const responseA = await xhr(env.port, {
         headers: { cookie: `MockserverID=switch-mock-A` }
       }).then(response => response.text());
-      const responseB = await xhr(msPort, {
+      const responseB = await xhr(env.port, {
         headers: { cookie: `MockserverID=switch-mock-B` }
       }).then(response => response.text());
 
@@ -44,7 +39,7 @@ describe("Mock - XHR", () => {
     });
 
     it("passes through given header to mock", async () => {
-      const response = await xhr(msPort, {
+      const response = await xhr(env.port, {
         headers: {
           cookie: `MockserverID=header-mock`,
           specialHeader: "my-header"
@@ -55,7 +50,7 @@ describe("Mock - XHR", () => {
     });
 
     it("passes through given body to mock", async () => {
-      const response = await xhr(msPort, {
+      const response = await xhr(env.port, {
         headers: { cookie: `MockserverID=body-mock` },
         method: "POST",
         body: "my-body"
@@ -67,7 +62,7 @@ describe("Mock - XHR", () => {
 
   describe("Deliver different content types", () => {
     it("delivers text based content (JSON)", async () => {
-      const response = await xhr(msPort, {
+      const response = await xhr(env.port, {
         headers: { cookie: `MockserverID=json-mock` }
       }).then(res => res.json());
 
@@ -75,7 +70,7 @@ describe("Mock - XHR", () => {
     });
 
     it("delivers text based content (XML)", async () => {
-      const response = await xhr(msPort, {
+      const response = await xhr(env.port, {
         headers: { cookie: `MockserverID=xml-mock` }
       }).then(res => res.text());
 
@@ -83,7 +78,7 @@ describe("Mock - XHR", () => {
     });
 
     it("delivers binary content", async () => {
-      const response = await xhr(msPort, {
+      const response = await xhr(env.port, {
         headers: { cookie: `MockserverID=binary-mock` }
       }).then(res => res.text());
 

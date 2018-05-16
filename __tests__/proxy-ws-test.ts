@@ -1,7 +1,7 @@
 import WebSocket from "ws";
 
-import createServer from "./helpers/createServer";
-import MockServerController from "./helpers/mockServerController";
+import IntegrationTestEnvironment from "./helpers/integrationTestEnvironment";
+import { EINVAL } from "constants";
 
 const generalDelay = 10;
 
@@ -30,38 +30,34 @@ function wait(timeout = 10) {
 }
 
 describe("Proxy - XHR", () => {
-  let s;
-  let msPort;
-  let msController;
+  let env;
 
   beforeEach(async () => {
-    s = await createServer();
-    msController = new MockServerController(s.port);
-    msPort = await msController.start();
+    env = new IntegrationTestEnvironment();
+    await env.setup();
   });
 
   afterEach(async () => {
-    await msController.stop();
-    s.server.close();
+    await env.teardown();
   });
 
   describe("Requests", () => {
     it("opens a connection", async () => {
       const mockConnection = jest.fn();
-      s.wss.on("connection", mockConnection);
+      env.proxyTargetWebsocketServer.on("connection", mockConnection);
 
-      const ws = await openWSConnection(msPort);
+      const ws = await openWSConnection(env.port);
       expect(mockConnection).toHaveBeenCalled();
       ws.close();
     });
 
     it("closes a connection", async () => {
       const mockClose = jest.fn();
-      s.wss.on("connection", (ws: WebSocket) => {
+      env.proxyTargetWebsocketServer.on("connection", (ws: WebSocket) => {
         ws.on("close", mockClose);
       });
 
-      const wsClient = await openWSConnection(msPort);
+      const wsClient = await openWSConnection(env.port);
       wsClient.close();
       await wait();
       expect(mockClose).toHaveBeenCalled();
@@ -69,11 +65,11 @@ describe("Proxy - XHR", () => {
 
     it("sends data", async () => {
       const mockData = jest.fn();
-      s.wss.on("connection", (ws: WebSocket) => {
+      env.proxyTargetWebsocketServer.on("connection", (ws: WebSocket) => {
         ws.on("message", mockData);
       });
 
-      const wsClient = await openWSConnection(msPort);
+      const wsClient = await openWSConnection(env.port);
       wsClient.send("my-data");
       await wait();
       expect(mockData).toHaveBeenCalledWith("my-data");
@@ -81,11 +77,11 @@ describe("Proxy - XHR", () => {
 
     it("sends data with similar timing", async () => {
       const mockData = jest.fn();
-      s.wss.on("connection", (ws: WebSocket) => {
+      env.proxyTargetWebsocketServer.on("connection", (ws: WebSocket) => {
         ws.on("message", () => mockData(new Date()));
       });
 
-      const wsClient = await openWSConnection(msPort);
+      const wsClient = await openWSConnection(env.port);
       wsClient.send("my-data");
       setTimeout(() => {
         wsClient.send("other-data");
@@ -99,8 +95,10 @@ describe("Proxy - XHR", () => {
   describe("Response", () => {
     it("opens a connection", async () => {
       const mockOpen = jest.fn();
-      s.wss.on("connection", (ws: WebSocket) => jest.fn());
-      const wsClient = await openWSConnection(msPort, {
+      env.proxyTargetWebsocketServer.on("connection", (ws: WebSocket) =>
+        jest.fn()
+      );
+      const wsClient = await openWSConnection(env.port, {
         openCallback: mockOpen
       });
 
@@ -109,11 +107,11 @@ describe("Proxy - XHR", () => {
 
     it("closes a connection", async () => {
       const mockClose = jest.fn();
-      s.wss.on("connection", async (ws: WebSocket) => {
+      env.proxyTargetWebsocketServer.on("connection", async (ws: WebSocket) => {
         ws.close();
       });
 
-      const wsClient = await openWSConnection(msPort);
+      const wsClient = await openWSConnection(env.port);
       wsClient.onclose = mockClose;
 
       await wait();
@@ -122,13 +120,13 @@ describe("Proxy - XHR", () => {
 
     it("receives data", async () => {
       const mockMessage = jest.fn();
-      s.wss.on("connection", async (ws: WebSocket) => {
+      env.proxyTargetWebsocketServer.on("connection", async (ws: WebSocket) => {
         setTimeout(() => {
           ws.send("datas");
         }, 10);
       });
 
-      const wsClient = await openWSConnection(msPort);
+      const wsClient = await openWSConnection(env.port);
       wsClient.onmessage = mockMessage;
 
       await wait(20);
@@ -139,7 +137,7 @@ describe("Proxy - XHR", () => {
 
     it("receives data with similar timing", async () => {
       const mockMessage = jest.fn();
-      s.wss.on("connection", async (ws: WebSocket) => {
+      env.proxyTargetWebsocketServer.on("connection", async (ws: WebSocket) => {
         setTimeout(() => {
           ws.send(+new Date());
         }, 10);
@@ -148,7 +146,7 @@ describe("Proxy - XHR", () => {
         }, 100);
       });
 
-      const wsClient = await openWSConnection(msPort);
+      const wsClient = await openWSConnection(env.port);
       wsClient.onmessage = mockMessage;
 
       await wait(110);
