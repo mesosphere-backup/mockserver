@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="2.1.0"></a>
+
+# [2.1.0](https://github.com/mesosphere/mockserver/compare/v2.0.1...v2.1.0) (2018-05-16)
+
+### Bug Fixes
+
+* **tooling:** change request and response to reflect express ([a5be1f6](https://github.com/mesosphere/mockserver/commit/a5be1f6))
+
+### Features
+
+* **mocks:** add support for XHR requests ([def32e2](https://github.com/mesosphere/mockserver/commit/def32e2))
+
 <a name="2.0.1"></a>
 
 ## [2.0.1](https://github.com/mesosphere/mockserver/compare/v2.0.0...v2.0.1) (2018-05-15)
