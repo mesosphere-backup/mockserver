@@ -15,7 +15,6 @@ describe("Server", () => {
         port: 3223,
         proxyHost: "google.com",
         proxyPort: 80,
-        mockSearchExpression: "./unkonwn-path",
         mocks: []
       });
       expect(mockExpressApp.use).toHaveBeenCalled();

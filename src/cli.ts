@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import log from "npmlog";
 
 import server from "./server";
