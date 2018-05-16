@@ -9,7 +9,7 @@ export interface IConfig {
   port: number;
   proxyHost: string;
   proxyPort: number;
-  mockSearchExpression: string;
+  mockSearchExpression?: string;
 }
 
 export interface IServerConfig extends IConfig {
