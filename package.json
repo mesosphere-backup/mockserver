@@ -137,7 +137,7 @@
     "commitizen": "2.9.6",
     "concurrently": "3.5.1",
     "cz-conventional-changelog": "2.1.0",
-    "detect-port": "1.2.2",
+    "detect-port": "1.2.3",
     "eventsource": "1.0.5",
     "husky": "1.0.0-rc.2",
     "jest": "22.4.3",
