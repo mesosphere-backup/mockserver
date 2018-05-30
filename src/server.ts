@@ -3,6 +3,7 @@ import cookieParser from "cookie-parser";
 import log from "npmlog";
 import { createProxyServer } from "http-proxy";
 import { IServerConfig } from "./types";
+import { AddressInfo } from "net";
 
 export interface IServerHandle {
   close: () => Promise<void>;
@@ -56,8 +57,13 @@ export default function server({
     });
 
     const listener = app.listen(port, () => {
-      // If 0 is passed as a port express searches a port for you
-      const actualPort = listener.address().port;
+      // If 0 is passed as a port express picks a random port thus we need to
+      // get the "actual" port and report it back.  Casting `address()` return
+      // to `AddressInfo` as we're not listening on a pipe or UNIX domain socket
+      // thus it always return the resp. object. For details pleas see:
+      // https://nodejs.org/docs/latest-v10.x/api/net.html#net_server_address
+      const actualPort = (listener.address() as AddressInfo).port;
+
       log.info("server", `Started mockserver on port ${actualPort}`);
       resolve({
         port: actualPort,
