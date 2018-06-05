@@ -47,6 +47,14 @@ module.exports = {
         res.write("<mock><id>42</id></mock>");
         res.end();
       }
+    },
+    {
+      id: "stream",
+      request: (req, res) => {
+        res.write("A");
+        res.write("B");
+        res.write("C");
+      }
     }
   ]
 };
