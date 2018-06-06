@@ -1,7 +1,10 @@
+import requestMock from "./helpers/requestMock";
+
 jest.unmock("node-fetch");
 
 import fetch from "node-fetch";
 import IntegrationTestEnvironment from "./helpers/integrationTestEnvironment";
+import toRespondWithChunks from "./helpers/toRespondWithChunks";
 
 function xhr(port, options = {}) {
   return fetch(`http://localhost:${port}`, {
@@ -12,6 +15,10 @@ function xhr(port, options = {}) {
     }
   });
 }
+
+// Register `toRespondWithChunks` matcher. Please note that the current jest
+// typings are not yet supporting async matchers.
+expect.extend({ toRespondWithChunks });
 
 describe("Mock - XHR", () => {
   let env;
@@ -83,6 +90,14 @@ describe("Mock - XHR", () => {
       }).then(res => res.text());
 
       expect(response).toBe("my-binary-string");
+    });
+
+    it("streams content", async () => {
+      await expect(requestMock(env, "stream")).toRespondWithChunks([
+        "A",
+        "B",
+        "C"
+      ]);
     });
   });
 });
