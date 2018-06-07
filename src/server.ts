@@ -5,6 +5,8 @@ import { createProxyServer } from "http-proxy";
 import { IServerConfig } from "./types";
 import { AddressInfo } from "net";
 
+export { getMockForJSON } from "./mocks";
+
 export interface IServerHandle {
   close: () => Promise<void>;
   port: number;

@@ -1,6 +1,7 @@
 import { resolve } from "path";
 import { sync as syncGlob } from "glob";
 import { IMock } from "./types";
+import { Request, RequestHandler, Response } from "express";
 
 function validateMock(file: string, mocks: any): IMock[] {
   if (!(mocks instanceof Array)) {
@@ -27,6 +28,21 @@ export const mocks = [];`);
   });
 
   return mocks as IMock[];
+}
+
+export function getMockForJSON(json: string | {}): RequestHandler {
+  if (!json) {
+    throw new Error("JSON argument is missing!");
+  }
+
+  const jsonString = JSON.stringify(
+    typeof json === "string" ? JSON.parse(json) : json
+  );
+
+  return (_req: Request, res: Response) => {
+    res.setHeader("Content-Type", "Application/json");
+    res.send(jsonString);
+  };
 }
 
 export function discoverMocks(globString: string): IMock[] {
