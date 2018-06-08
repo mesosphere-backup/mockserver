@@ -96,7 +96,7 @@ describe("mocks", () => {
       }).not.toThrow();
     });
 
-    it("returns doesn't throw when json is provided", () => {
+    it("doesn't throw when json is provided", () => {
       const mockfilename = "1-valid-json-mock";
 
       sync.mockReturnValue([mockfilename]);
