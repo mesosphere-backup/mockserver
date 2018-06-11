@@ -1,4 +1,4 @@
-import { discoverMocks } from "../mocks";
+import { discoverMocks, getMockForJSON } from "../mocks";
 import { sync } from "glob";
 import { resolve } from "path";
 
@@ -65,6 +65,43 @@ describe("mocks", () => {
       const mockfilename = "1-valid-mock-empty-array";
       sync.mockReturnValue([mockfilename]);
       resolve.mockReturnValue(mockfilename);
+      expect(() => {
+        discoverMocks(mockfilename);
+      }).not.toThrow();
+    });
+  });
+
+  describe("#getMockForJSON", () => {
+    it("throws unless json is provided", () => {
+      expect(() => {
+        getMockForJSON(null);
+      }).toThrow();
+    });
+
+    it("throws unless valid json string is provided", () => {
+      expect(() => {
+        getMockForJSON("foo");
+      }).toThrow();
+    });
+
+    it("doesn't throw when json is provided", () => {
+      expect(() => {
+        getMockForJSON({});
+      }).not.toThrow();
+    });
+
+    it("doesn't throw when valid json string is provided", () => {
+      expect(() => {
+        getMockForJSON("{}");
+      }).not.toThrow();
+    });
+
+    it("doesn't throw when json is provided", () => {
+      const mockfilename = "1-valid-json-mock";
+
+      sync.mockReturnValue([mockfilename]);
+      resolve.mockReturnValue(mockfilename);
+
       expect(() => {
         discoverMocks(mockfilename);
       }).not.toThrow();

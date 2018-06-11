@@ -1,5 +1,4 @@
 import express from "express";
-import { createProxyServer } from "http-proxy";
 import server from "../server";
 
 const mockExpressApp = express();
