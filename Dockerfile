@@ -1,4 +1,4 @@
-FROM node:9.11.1-slim@sha256:8af8ba19dc651ed8b263efa2ea41af964d08e85b342eb7b7f98aa88fcbb674b7
+FROM node:9.11.1-slim@sha256:a4016b922cca10ddfb7114490209cfcd704ce86962cf21b84fdc51b4404b8804
 
 EXPOSE 3000
 
