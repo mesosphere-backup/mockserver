@@ -41,7 +41,7 @@ pipeline {
         }
       }
     }
-    stage('Bump Version') {
+    stage('Semantic Release') {
       when {
         expression {
           release_branches.contains(BRANCH_NAME)
@@ -49,12 +49,10 @@ pipeline {
       }
       steps {
         withCredentials([
-            usernamePassword(credentialsId: 'a7ac7f84-64ea-4483-8e66-bb204484e58f', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USER')
+          string(credentialsId: "d146870f-03b0-4f6a-ab70-1d09757a51fc", variable: "GH_TOKEN"),
+          string(credentialsId: '1308ac87-5de8-4120-8417-b3fc8d5b4ecc', variable: 'NPM_TOKEN')
         ]) {
-          sh "git fetch"
-          sh "git checkout $BRANCH_NAME"
-          sh "echo Last Commit: \$(git log -1 --oneline)"
-          sh "[ \"\$(git log --oneline \$(git tag -l --sort=-version:refname | head -1)...HEAD | grep -E '(fix?(.+):|feat?(.+):|perf?(.+):)' | wc -l)\" -ne 0 ] && npm run release && git push --follow-tags https://$GIT_USER:$GIT_PASSWORD@github.com/mesosphere/mockserver $BRANCH_NAME || echo 'Last commit it not a merge.'"
+          sh "npx semantic-release"
         }
       }
     }

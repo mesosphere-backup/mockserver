@@ -1,6 +1,6 @@
 {
-  "name": "mockserver",
-  "version": "2.3.0",
+  "name": "@mesosphere/mockserver",
+  "version": "0.0.0-dev+semantically-released",
   "description": "A mockserver that allows you to mock XHR, long-polling XHR, server sent events and websocket connections",
   "main": "dist/server.js",
   "bin": "dist/cli.js",
@@ -147,6 +147,7 @@
     "node-fetch": "2.1.2",
     "nodemon": "1.17.5",
     "prettier": "1.12.1",
+    "semantic-release": "15.13.2",
     "standard-version": "4.3.0",
     "ts-jest": "22.4.4",
     "tslint": "5.10.0",
