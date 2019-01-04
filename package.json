@@ -36,11 +36,10 @@
   "bugs": {
     "url": "https://github.com/mesosphere/mockserver/issues"
   },
-  "standard-version": {
-    "scripts": {
-      "postchangelog": "npm run format"
-    }
+  "publishConfig": {
+    "access": "public"
   },
+  "files": ["dist"],
   "jest": {
     "collectCoverage": true,
     "coverageReporters": [
