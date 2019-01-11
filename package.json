@@ -140,7 +140,7 @@
     "husky": "1.0.0-rc.2",
     "jest": "23.0.1",
     "jest-junit": "3.7.0",
-    "jest-runner-prettier": "0.2.3",
+    "jest-runner-prettier": "0.2.6",
     "jest-runner-tslint": "1.0.4",
     "node-fetch": "2.1.2",
     "nodemon": "1.17.5",
