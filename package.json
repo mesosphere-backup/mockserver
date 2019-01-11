@@ -146,7 +146,7 @@
     "nodemon": "1.17.5",
     "prettier": "1.12.1",
     "semantic-release": "15.13.2",
-    "ts-jest": "22.4.4",
+    "ts-jest": "22.4.6",
     "tslint": "5.10.0",
     "tslint-config-prettier": "1.12.0",
     "tslint-eslint-rules": "5.1.0",
