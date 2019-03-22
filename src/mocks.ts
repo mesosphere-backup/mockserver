@@ -46,9 +46,17 @@ export function getMockForJSON(json: string | {}): RequestHandler {
 }
 
 export function discoverMocks(globString: string): IMock[] {
+  // @ts-ignore
+  // tslint:disable-next-line:no-empty
+  global.describe = () => {};
+
   return syncGlob(globString)
-    .map(file =>
-      validateMock(file, require(resolve(process.cwd(), file)).mocks)
-    )
+    .map(file => {
+      try {
+        return validateMock(file, require(resolve(process.cwd(), file)).mocks);
+      } catch (e) {
+        return [];
+      }
+    })
     .reduce((carry, item) => carry.concat(item), []);
 }
