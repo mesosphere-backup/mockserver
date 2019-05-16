@@ -142,7 +142,7 @@
     "jest-junit": "3.7.0",
     "jest-runner-prettier": "0.2.3",
     "jest-runner-tslint": "1.0.4",
-    "node-fetch": "2.1.2",
+    "node-fetch": "2.6.0",
     "nodemon": "1.17.5",
     "prettier": "1.12.1",
     "semantic-release": "15.13.2",
