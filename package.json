@@ -144,7 +144,7 @@
     "jest-runner-tslint": "1.0.4",
     "node-fetch": "2.1.2",
     "nodemon": "1.17.5",
-    "prettier": "1.12.1",
+    "prettier": "1.18.0",
     "semantic-release": "15.13.2",
     "ts-jest": "22.4.4",
     "tslint": "5.10.0",
